@@ -31,27 +31,33 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if (header != null && header.startsWith("Bearer ")) {
                 String token = header.substring(7);
 
+                // Inside doFilterInternal...
                 if (jwtTokenProvider.validateToken(token)) {
                     String username = jwtTokenProvider.getUsernameFromToken(token);
-                    List<String> role = jwtTokenProvider.getRoleFromToken(token);
+
+                    // Updated to handle the List<String> correctly
+                    List<String> roles = jwtTokenProvider.getRoleFromToken(token);
 
                     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                        List<SimpleGrantedAuthority> authorities =
-                                role.stream()
-                                        .map(SimpleGrantedAuthority::new)
-                                        .toList();
+                        // Convert the role strings into SimpleGrantedAuthority objects
+                        List<SimpleGrantedAuthority> authorities = roles.stream()
+                                .map(SimpleGrantedAuthority::new)
+                                .toList();
 
                         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                                 username, null, authorities
                         );
+
                         authenticationToken.setDetails(
                                 new WebAuthenticationDetailsSource().buildDetails(request)
                         );
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     }
                 }
-            }
+                }
+
         }catch (Exception ex){
             log.error("Authentication check skipped due to error: {}", ex.getMessage());
         }

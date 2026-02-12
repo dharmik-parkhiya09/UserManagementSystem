@@ -24,7 +24,7 @@ public class JwtTokenProvider {
     @Value("${jwt.secretKey}")
     private String jwtSecretKey;
 
-    private final long EXPIRATION_TIME = 1000 * 60 * 30;
+    private final long EXPIRATION_TIME = 86400000;
 
     private SecretKey getSecretKey() {
         return Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
@@ -39,6 +39,7 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(user.getUsername())
+                .claim("userId", user.getId())
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000))
@@ -60,16 +61,16 @@ public class JwtTokenProvider {
     }
 
     public Long getUserIdFromToken(String token) {
-        String id = (String) parseClaims(token).get("userID");
-        return Long.parseLong(id);
+        Object userId = parseClaims(token).get("userId");
+        return userId instanceof Number ? ((Number) userId).longValue() : Long.parseLong(userId.toString());
     }
 
     public List<String> getRoleFromToken(String token) {
-        Object role = parseClaims(token).get("role");
-        if (role == null) {
-            throw new IllegalArgumentException("Role not found in token");
+        List<?> roles = parseClaims(token).get("roles", List.class);
+        if (roles == null) {
+            throw new IllegalArgumentException("Roles not found in token");
         }
-        return parseClaims(token).get("roles",List.class);
+        return roles.stream().map(Object::toString).toList();
     }
 
     public boolean validateToken(String token) {
