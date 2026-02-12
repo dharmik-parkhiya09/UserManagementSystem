@@ -2,7 +2,9 @@ package org.dharmik.usermanegmentapp.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.dharmik.usermanegmentapp.Entity.Role;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.dharmik.usermanegmentapp.Entity.User;
@@ -12,6 +14,8 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -26,16 +30,22 @@ public class JwtTokenProvider {
         return Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateAccessToken(User user) {
+    public String generateToken(User user) {
+
+        Set<String> roles = user.getRoles()
+                .stream()
+                .map(Role::getName)
+                .collect(Collectors.toSet());
+
         return Jwts.builder()
-                .subject(user.getUsername())
-                .claim("userID", user.getId())
-                .claim("role", user.getRoles())
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(getSecretKey())
+                .setSubject(user.getUsername())
+                .claim("roles", roles)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+                .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
+
 
     private Claims parseClaims(String token) {
         return Jwts.parser()

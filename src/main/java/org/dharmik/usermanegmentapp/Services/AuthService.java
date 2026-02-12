@@ -70,7 +70,7 @@ public class AuthService {
             User newUser = userRepo.findByUsername(username)
                     .orElseThrow(() -> new ResourceNotFoundException("User Not Found !"));
 
-            String token = jwtTokenProvider.generateAccessToken(newUser);
+            String token = jwtTokenProvider.generateToken(newUser);
 
             return Map.of(
                     "id",newUser.getId(),
