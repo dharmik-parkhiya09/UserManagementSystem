@@ -7,8 +7,6 @@ import org.dharmik.usermanegmentapp.Repositary.RoleRepo;
 import org.dharmik.usermanegmentapp.Repositary.UserRepo;
 import org.dharmik.usermanegmentapp.exception.ResourceNotFoundException;
 import org.dharmik.usermanegmentapp.security.JwtTokenProvider;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +27,6 @@ public class AuthService {
     private final RoleRepo roleRepo;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final ModelMapper modelMapper;
     private final JwtTokenProvider jwtTokenProvider;
 
 
@@ -85,6 +82,5 @@ public class AuthService {
             throw new BadCredentialsException("Invalid Username or password");
         }
     }
-
 
 }

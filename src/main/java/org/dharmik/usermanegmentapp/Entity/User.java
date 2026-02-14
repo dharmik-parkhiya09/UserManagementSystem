@@ -14,7 +14,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Table(name = "users")
 public class User {
 
@@ -29,6 +28,9 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @Column(nullable = false)
+    private String provider; // LOCAL or GOOGLE
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_roles",
@@ -37,7 +39,5 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-
     private LocalDateTime date;
-
 }

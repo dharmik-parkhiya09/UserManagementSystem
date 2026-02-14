@@ -21,7 +21,7 @@ public class UserService {
         return repo.findAll();
     }
 
-    public Optional<User> getUserById(Integer id) {
+    public Optional<User> getUserById(Long id) {
         return repo.findById(Long.valueOf(id));
     }
 

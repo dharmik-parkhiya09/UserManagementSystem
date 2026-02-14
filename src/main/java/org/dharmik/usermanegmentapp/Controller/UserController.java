@@ -32,7 +32,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public User updateEntry(@PathVariable Long id, @RequestBody User updatedUser) { // Fixed: Changed to Long
-        User existingUser = userEntryService.getUserById(id.intValue())
+        User existingUser = userEntryService.getUserById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 
         if (updatedUser.getUsername() != null && !updatedUser.getUsername().isEmpty()) {
@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User getEntryById(@PathVariable Integer id) {
+    public User getEntryById(@PathVariable Long id) {
         return userEntryService.getUserById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }

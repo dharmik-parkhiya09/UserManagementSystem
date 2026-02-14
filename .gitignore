@@ -69,3 +69,6 @@ build/
 # Target Safety
 ############################################
 target/
+
+
+application-secret.properties
