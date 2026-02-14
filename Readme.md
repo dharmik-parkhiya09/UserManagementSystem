@@ -30,30 +30,6 @@ TECH STACK
 - Maven
 
 ----------------------------------------------------
-PROJECT STRUCTURE
-----------------------------------------------------
-
-src/
-├── main/
-│    ├── java/
-│    │    └── org.dharmik.usermanagementapp/
-│    │         ├── config/
-│    │         ├── Controller/
-│    │         ├── Entity/
-│    │         ├── exception/
-│    │         ├── Repository/
-│    │         ├── security/
-│    │         ├── Services/
-│    │         └── UserManagementAppApplication.java
-│    └── resources/
-│         └── application.properties
-├── test/
-├── pom.xml
-├── mvnw
-├── mvnw.cmd
-└── README.md
-
-----------------------------------------------------
 AUTHENTICATION FLOW
 ----------------------------------------------------
 
