@@ -44,6 +44,8 @@ logs/
 application-local.properties
 application-dev.properties
 application-prod.properties
+src/main/resources/application-secret.properties
+
 
 ############################################
 # Database Files
@@ -71,4 +73,3 @@ build/
 target/
 
 
-application-secret.properties
